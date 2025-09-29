@@ -1,19 +1,16 @@
-# Deep-Learning-Exp4
+# Implement a Transfer Learning concept in Image Classification
 
-**Implement a Transfer Learning concept in Image Classification**
-
-**AIM**
-
+## AIM
 To develop an image classification model using transfer learning with VGG19 architecture for the given dataset.
 
-**THEORY**
+## THEORY
 
 Neural Network Model
 
 <img width="1035" height="373" alt="image" src="https://github.com/user-attachments/assets/9ac9a25c-1c1e-4f1a-b7ef-2d95a203bb34" />
 
 
-**DESIGN STEPS**
+## DESIGN STEPS
 
 STEP 1: We begin by importing the necessary Python libraries, including TensorFlow for deep learning, data preprocessing tools, and visualization libraries.
 
@@ -33,7 +30,7 @@ STEP 8: We evaluate the trained model's performance using the testing data, gene
 
 STEP 9: We demonstrate the model's practical use by randomly selecting and testing a new cell image for classification.
 
-**PROGRAM**
+## PROGRAM
 ``` python
 import tensorflow as tf
 from tensorflow.compat.v1.keras.backend import set_session
@@ -182,24 +179,24 @@ plt.show()
 
 *# Train the model
 
-**OUTPUT**
+## OUTPUT
 
 Training Loss, Validation Loss Vs Iteration Plot
 
 <img width="468" height="329" alt="image" src="https://github.com/user-attachments/assets/d88ef599-256d-4f73-9201-086ec1059420" />
 
 
-**Confusion Matrix**
+## Confusion Matrix
 
 <img width="337" height="90" alt="image" src="https://github.com/user-attachments/assets/d0d0744d-a953-4797-86dd-26e5222ec93f" />
 
 
-**Classification Report**
+## Classification Report
 
 <img width="468" height="329" alt="image" src="https://github.com/user-attachments/assets/d88ef599-256d-4f73-9201-086ec1059420" />
 
 
-**New Sample Data Prediction**
+## New Sample Data Prediction
 
 <img width="683" height="730" alt="image" src="https://github.com/user-attachments/assets/f805dbcc-54bc-4137-a3d4-229865559730" />
 
