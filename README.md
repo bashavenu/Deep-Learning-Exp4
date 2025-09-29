@@ -171,11 +171,11 @@ plt.show()
 
 **Register Number: 2305002001**
 
-*# Load Pretrained Model and Modify for Transfer Learning
+# Load Pretrained Model and Modify for Transfer Learning
 
-*# Modify the final fully connected layer to match the dataset classes
+# Modify the final fully connected layer to match the dataset classes
 
-*# Include the Loss function and optimizer
+# Include the Loss function and optimizer
 
 *# Train the model
 
