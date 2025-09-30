@@ -167,9 +167,9 @@ plt.axis("off")
 plt.imshow(img)
 plt.show()
 ```
-**Name: Adhithya K**
+**Name: D.Vishwa**
 
-**Register Number: 2305002001**
+**Register Number: 2305001034**
 
 # Load Pretrained Model and Modify for Transfer Learning
 
@@ -177,7 +177,7 @@ plt.show()
 
 # Include the Loss function and optimizer
 
-*# Train the model
+# Train the model
 
 ## OUTPUT
 
