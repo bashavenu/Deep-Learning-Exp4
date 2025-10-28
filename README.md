@@ -167,9 +167,9 @@ plt.axis("off")
 plt.imshow(img)
 plt.show()
 ```
-**Name: D.Vishwa**
+**Name: BASHA VENU**
 
-**Register Number: 2305001034**
+**Register Number: 2305001005**
 
 # Load Pretrained Model and Modify for Transfer Learning
 
