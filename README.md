@@ -7,7 +7,7 @@ To develop an image classification model using transfer learning with VGG19 arch
 
 Neural Network Model
 
-<img width="1035" height="373" alt="image" src="https://github.com/user-attachments/assets/9ac9a25c-1c1e-4f1a-b7ef-2d95a203bb34" />
+<img width="937" height="332" alt="image" src="https://github.com/user-attachments/assets/447092a0-3278-4df0-bcdb-db21021377db" />
 
 
 ## DESIGN STEPS
@@ -31,6 +31,10 @@ STEP 8: We evaluate the trained model's performance using the testing data, gene
 STEP 9: We demonstrate the model's practical use by randomly selecting and testing a new cell image for classification.
 
 ## PROGRAM
+
+## NAME:BASHA VENU
+
+## REG NO:2305001005
 ``` python
 import tensorflow as tf
 from tensorflow.compat.v1.keras.backend import set_session
@@ -166,39 +170,32 @@ plt.title("Model prediction: "+("Parasitized" if pred  else "Un Infected")
 plt.axis("off")
 plt.imshow(img)
 plt.show()
+
 ```
-**Name: BASHA VENU**
-
-**Register Number: 2305001005**
-
-# Load Pretrained Model and Modify for Transfer Learning
-
-# Modify the final fully connected layer to match the dataset classes
-
-# Include the Loss function and optimizer
-
-# Train the model
 
 ## OUTPUT
 
 Training Loss, Validation Loss Vs Iteration Plot
 
-<img width="468" height="329" alt="image" src="https://github.com/user-attachments/assets/d88ef599-256d-4f73-9201-086ec1059420" />
+<img width="706" height="533" alt="image" src="https://github.com/user-attachments/assets/22c7b0e2-88d1-4e6b-be88-5e8b6e6c7512" />
 
 
 ## Confusion Matrix
 
-<img width="337" height="90" alt="image" src="https://github.com/user-attachments/assets/d0d0744d-a953-4797-86dd-26e5222ec93f" />
+<img width="427" height="135" alt="image" src="https://github.com/user-attachments/assets/f1d5cc06-1cbd-4fc4-9084-442b75131899" />
 
 
 ## Classification Report
 
-<img width="468" height="329" alt="image" src="https://github.com/user-attachments/assets/d88ef599-256d-4f73-9201-086ec1059420" />
+<img width="728" height="563" alt="image" src="https://github.com/user-attachments/assets/41804494-ab64-404e-bc5b-45e17e9508e4" />
 
 
 ## New Sample Data Prediction
 
-<img width="683" height="730" alt="image" src="https://github.com/user-attachments/assets/f805dbcc-54bc-4137-a3d4-229865559730" />
+<img width="952" height="91" alt="image" src="https://github.com/user-attachments/assets/7bce636a-300e-46ac-a6c0-ba9a7446686f" />
+
+<img width="693" height="773" alt="image" src="https://github.com/user-attachments/assets/b7bb0449-7ef3-4df2-9344-c69609ae0c68" />
+
 
 **RESULT**
 
