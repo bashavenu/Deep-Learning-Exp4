@@ -36,165 +36,63 @@ STEP 9: We demonstrate the model's practical use by randomly selecting and testi
 
 ## REG NO:2305001005
 ``` python
+# Experiment: Transfer Learning for Image Classification
+# ------------------------------------------------------
+
+# Step 1: Import Libraries
 import tensorflow as tf
-from tensorflow.compat.v1.keras.backend import set_session
-config = tf.compat.v1.ConfigProto()
-config.gpu_options.allow_growth = True # dynamically grow the memory used on the GPU
-config.log_device_placement = True # to log device placement (on which device the operation ran)
-sess = tf.compat.v1.Session(config=config)
-set_session(sess)
+from tensorflow.keras import layers, models
 
-import os
-import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
-from matplotlib.image import imread
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow import keras
-from tensorflow.keras import layers
-from tensorflow.keras import utils
-from tensorflow.keras import models
-from sklearn.metrics import classification_report,confusion_matrix
+# Step 2: Load and Preprocess Dataset (CIFAR-10)
+(train_images, train_labels), (test_images, test_labels) = tf.keras.datasets.cifar10.load_data()
 
-%matplotlib inline
-my_data_dir = 'dataset/cell_images'
-os.listdir(my_data_dir)
-test_path = my_data_dir+'/test/'
-train_path = my_data_dir+'/train/'
+# Normalize pixel values to range [0,1]
+train_images, test_images = train_images / 255.0, test_images / 255.0
 
-os.listdir(train_path)
-len(os.listdir(train_path+'/uninfected/'))
-len(os.listdir(train_path+'/parasitized/'))
-os.listdir(train_path+'/parasitized')[0]
+# Step 3: Load Pre-trained Model (MobileNetV2)
+base_model = tf.keras.applications.MobileNetV2(
+    input_shape=(32, 32, 3),
+    include_top=False,
+    weights='imagenet'
+)
+base_model.trainable = False  # Freeze the base layers
 
-para_img= imread(train_path+
-                 '/parasitized/'+
-                 os.listdir(train_path+'/parasitized')[0])
+# Step 4: Add Custom Classification Layers
+model = models.Sequential([
+    base_model,
+    layers.GlobalAveragePooling2D(),
+    layers.Dense(128, activation='relu'),
+    layers.Dropout(0.3),
+    layers.Dense(10, activation='softmax')  # 10 classes in CIFAR-10
+])
 
-plt.imshow(para_img)
-# Checking the image dimensions
-dim1 = []
-dim2 = []
-for image_filename in os.listdir(test_path+'/uninfected'):
-    img = imread(test_path+'/uninfected'+'/'+image_filename)
-    d1,d2,colors = img.shape
-    dim1.append(d1)
-    dim2.append(d2)
+# Step 5: Compile the Model
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
 
-sns.jointplot(x=dim1,y=dim2)
+# Step 6: Train the Model
+history = model.fit(
+    train_images, train_labels,
+    epochs=5,
+    validation_data=(test_images, test_labels)
+)
 
-image_shape = (130,130,3)
-# help(ImageDataGenerator)
+# Step 7: Evaluate the Model
+loss, accuracy = model.evaluate(test_images, test_labels)
+print(f"\nTest Accuracy: {accuracy * 100:.2f}%")
 
-image_gen = ImageDataGenerator(rotation_range=20, # rotate the image 20 degrees
-                               width_shift_range=0.10, # Shift the pic width by a max of 5%
-                               height_shift_range=0.10, # Shift the pic height by a max of 5%
-                               rescale=1/255, # Rescale the image by normalzing it.
-                               shear_range=0.1, # Shear means cutting away part of the image (max 10%)
-                               zoom_range=0.1, # Zoom in by 10% max
-                               horizontal_flip=True, # Allo horizontal flipping
-                               fill_mode='nearest' # Fill in missing pixels with the nearest filled value
-                              )
+# Step 8: Save the Model
+model.save("transfer_learning_model.h5")
+print("\nModel saved successfully!")
 
-image_gen.flow_from_directory(train_path)
-
-image_gen.flow_from_directory(test_path)
-
-
-
-model = models.Sequential()
-model.add(keras.Input(shape=(image_shape)))
-model.add(layers.Conv2D(filters=16,kernel_size=(3,3),activation='relu',))
-model.add(layers.MaxPooling2D(pool_size=(2, 2)))
-
-model.add(layers.Conv2D(filters=32, kernel_size=(3,3), activation='relu',))
-model.add(layers.MaxPooling2D(pool_size=(2, 2)))
-
-model.add(layers.Conv2D(filters=64, kernel_size=(3,3), activation='relu',))
-model.add(layers.MaxPooling2D(pool_size=(2, 2)))
-
-model.add(layers.Flatten())
-
-model.add(layers.Dense(64,activation='relu'))
-model.add(layers.Dropout(0.5))
-model.add(layers.Dense(1,activation='sigmoid'))
-
-model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
-
-model.summary()
-batch_size = 16
-
-# help(image_gen.flow_from_directory)
-
-train_image_gen = image_gen.flow_from_directory(train_path,
-                                               target_size=image_shape[:2],
-                                                color_mode='rgb',
-                                               batch_size=batch_size,
-                                               class_mode='binary')
-
-train_image_gen.batch_size
-len(train_image_gen.classes)
-train_image_gen.total_batches_seen
-test_image_gen = image_gen.flow_from_directory(test_path,
-                                               target_size=image_shape[:2],
-                                               color_mode='rgb',
-                                               batch_size=batch_size,
-                                               class_mode='binary',shuffle=False)
-train_image_gen.class_indices
-results = model.fit(train_image_gen,epochs=5,
-                              validation_data=test_image_gen)
-                             
-model.save('cell_model.h5')
-losses = pd.DataFrame(model.history.history)
-losses[['loss','val_loss']].plot()
-model.metrics_names
-model.evaluate(test_image_gen)
-pred_probabilities = model.predict(test_image_gen)
-test_image_gen.classes
-predictions = pred_probabilities > 0.5
-print(classification_report(test_image_gen.classes,predictions))
-confusion_matrix(test_image_gen.classes,predictions)
-
-
-import random
-list_dir=["Un Infected","parasitized"]
-dir_=(random.choice(list_dir))
-p_img=imread(train_path+'/'+dir_+'/'+os.listdir(train_path+'/'+dir_)[random.randint(0,100)])
-img  = tf.convert_to_tensor(np.asarray(p_img))
-img = tf.image.resize(img,(130,130))
-img=img.numpy()
-pred=bool(model.predict(img.reshape(1,130,130,3))<0.5 )
-plt.title("Model prediction: "+("Parasitized" if pred  else "Un Infected")
-			+"\nActual Value: "+str(dir_))
-plt.axis("off")
-plt.imshow(img)
-plt.show()
 
 ```
 
 ## OUTPUT
 
-Training Loss, Validation Loss Vs Iteration Plot
-
-<img width="706" height="533" alt="image" src="https://github.com/user-attachments/assets/22c7b0e2-88d1-4e6b-be88-5e8b6e6c7512" />
-
-
-## Confusion Matrix
-
-<img width="427" height="135" alt="image" src="https://github.com/user-attachments/assets/f1d5cc06-1cbd-4fc4-9084-442b75131899" />
-
-
-## Classification Report
-
-<img width="728" height="563" alt="image" src="https://github.com/user-attachments/assets/41804494-ab64-404e-bc5b-45e17e9508e4" />
-
-
-## New Sample Data Prediction
-
-<img width="952" height="91" alt="image" src="https://github.com/user-attachments/assets/7bce636a-300e-46ac-a6c0-ba9a7446686f" />
-
-<img width="693" height="773" alt="image" src="https://github.com/user-attachments/assets/b7bb0449-7ef3-4df2-9344-c69609ae0c68" />
+<img width="1220" height="237" alt="image" src="https://github.com/user-attachments/assets/7e410507-1411-482f-b51f-5e37ca2b563e" />
+<img width="270" height="77" alt="image" src="https://github.com/user-attachments/assets/583a949c-19e9-4e7f-91a2-2a72d00fab09" />
 
 
 **RESULT**
