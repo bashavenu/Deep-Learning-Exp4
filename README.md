@@ -1,34 +1,52 @@
 # Implement a Transfer Learning concept in Image Classification
 
 ## AIM
-To develop an image classification model using transfer learning with VGG19 architecture for the given dataset.
+To develop an image classification model using transfer learning by using the pre-trained MobileNetV2 architecture and training a new classifier on the CIFAR-10 dataset.
 
 ## THEORY
 
-Neural Network Model
+Transfer Learning is a deep learning technique where a model trained on a large dataset is reused for another related task. Instead of training a neural network from scratch, we use a pre-trained model such as VGG19, ResNet, or MobileNetV2, which already learned powerful feature representations from millions of images. This reduces training time, improves accuracy, and requires less data.
 
-<img width="937" height="332" alt="image" src="https://github.com/user-attachments/assets/447092a0-3278-4df0-bcdb-db21021377db" />
+MobileNetV2 is an efficient convolutional neural network designed for mobile and embedded systems. It uses depthwise separable convolutions, inverted residual blocks, and linear bottlenecks. These techniques help reduce the number of parameters while still maintaining good accuracy. In transfer learning, the base layers of MobileNetV2 act as a feature extractor, and only the top layers (classifier) are newly added and trained. For the CIFAR-10 dataset, new dense layers are attached at the end to classify the 10 image categories.
 
 
 ## DESIGN STEPS
 
-STEP 1: We begin by importing the necessary Python libraries, including TensorFlow for deep learning, data preprocessing tools, and visualization libraries.
+STEP 1: Import the required libraries
 
-STEP 2: To leverage the power of GPU acceleration, we configure TensorFlow to allow GPU processing, which can significantly speed up model training.
+Load TensorFlow and Keras modules needed for building and training the neural network.
 
-STEP 3: We load the dataset, consisting of cell images, and check their dimensions. Understanding the image dimensions is crucial for setting up the neural network architecture.
+STEP 2: Load and preprocess the CIFAR-10 dataset
 
-STEP 4: We create an image generator that performs data augmentation, including rotation, shifting, rescaling, and flipping. Data augmentation enhances the model's ability to generalize and recognize malaria-infected cells in various orientations and conditions. 
+Load the training and testing images.
+Normalize the pixel values to the range 0–1 so the model learns efficiently.
 
-STEP 5: We design a convolutional neural network (CNN) architecture consisting of convolutional layers, max-pooling layers, and fully connected layers. The model is compiled with appropriate loss and optimization functions.
+STEP 3: Load the pre-trained MobileNetV2 model
 
-STEP 6: We split the dataset into training and testing sets, and then train the CNN model using the training data. The model learns to differentiate between parasitized and uninfected cells during this phase.
+Use MobileNetV2 with ImageNet weights.
+Remove the top classifier layer since we will add our own.
+Freeze the base model so its weights do not change during training.
 
-STEP 7: We visualize the training and validation loss to monitor the model's learning progress and detect potential overfitting or underfitting.
+STEP 4: Add custom classification layers
 
-STEP 8: We evaluate the trained model's performance using the testing data, generating a classification report and confusion matrix to assess accuracy and potential misclassifications.
+Attach layers like Global Average Pooling, Dense layer, Dropout, and final output layer for 10 classes.
+These layers will learn to classify the CIFAR-10 images.
 
-STEP 9: We demonstrate the model's practical use by randomly selecting and testing a new cell image for classification.
+STEP 5: Compile the model
+
+Choose an optimizer (Adam), loss function (cross-entropy), and accuracy as the performance metric.
+
+STEP 6: Train the model
+
+Train the model for a few epochs using the training data and validate on the test data.
+
+STEP 7: Evaluate the model
+
+Measure the accuracy and loss of the trained model on unseen test images.
+
+STEP 8: Save the trained model
+
+Store the final trained model in a file so it can be loaded and used later.
 
 ## PROGRAM
 
@@ -97,4 +115,4 @@ print("\nModel saved successfully!")
 
 **RESULT**
 
-The model's performance is evaluated through training and testing, and it shows potential for assisting healthcare professionals in diagnosing malaria more efficiently and accurately
+Thus, the transfer learning model using MobileNetV2 was successfully implemented, trained, evaluated on the CIFAR-10 dataset.
